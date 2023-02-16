@@ -11,8 +11,10 @@ import javax.ws.rs.core.MediaType;
 
 import com.google.gson.Gson;
 
+import br.com.sauderesidence.services.controllers.AgendaController;
 import br.com.sauderesidence.services.controllers.UsuarioController;
 import br.com.sauderesidence.services.helpers.Criptografia;
+import br.com.sauderesidence.services.models.AgendaModel;
 import br.com.sauderesidence.services.models.UsuarioModel;
 
 @Path("/srhcws")
@@ -39,6 +41,24 @@ public class SaudeResidenceWs {
 			// TODO Auto-generated catch block
 			return gson.toJson(e.getMessage());
 		}
+		
+	}
+	
+	@GET
+	@Path("listaragendaporprofissional/{idperson}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String listarAgendaPorProfissional(@PathParam("idperson") int idperson) {
+		
+		AgendaController ctr = new AgendaController();
+		Gson gson = new Gson();
+		try {
+			List<AgendaModel> lista = ctr.listarAgendaPorProfissional(idperson);
+			return gson.toJson(lista);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			return gson.toJson(e.getMessage());
+		}
+		
 	}
 
 }
