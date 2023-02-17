@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 public class AgendaModel implements Serializable {
 	
+	private static final long serialVersionUID = 1L;
 	private int idcapconsult;
 	private int idadmission;
 	private int idpatient;

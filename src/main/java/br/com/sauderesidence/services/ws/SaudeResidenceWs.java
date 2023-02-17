@@ -12,9 +12,11 @@ import javax.ws.rs.core.MediaType;
 import com.google.gson.Gson;
 
 import br.com.sauderesidence.services.controllers.AgendaController;
+import br.com.sauderesidence.services.controllers.PacienteController;
 import br.com.sauderesidence.services.controllers.UsuarioController;
 import br.com.sauderesidence.services.helpers.Criptografia;
 import br.com.sauderesidence.services.models.AgendaModel;
+import br.com.sauderesidence.services.models.PacienteModel;
 import br.com.sauderesidence.services.models.UsuarioModel;
 
 @Path("/srhcws")
@@ -53,6 +55,23 @@ public class SaudeResidenceWs {
 		Gson gson = new Gson();
 		try {
 			List<AgendaModel> lista = ctr.listarAgendaPorProfissional(idperson);
+			return gson.toJson(lista);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			return gson.toJson(e.getMessage());
+		}
+		
+	}
+	
+	@GET
+	@Path("listarpacientesgeral")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String listarPacientesGeral() {
+		
+		PacienteController ctr = new PacienteController();
+		Gson gson = new Gson();
+		try {
+			List<PacienteModel> lista = ctr.listarPacientesGeral();
 			return gson.toJson(lista);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
