@@ -1,9 +1,11 @@
 package br.com.sauderesidence.services.ws;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -13,10 +15,14 @@ import com.google.gson.Gson;
 
 import br.com.sauderesidence.services.controllers.AgendaController;
 import br.com.sauderesidence.services.controllers.PacienteController;
+import br.com.sauderesidence.services.controllers.PrescricaoMedicaController;
+import br.com.sauderesidence.services.controllers.SolicitacaoPrescricaoMedicaController;
 import br.com.sauderesidence.services.controllers.UsuarioController;
 import br.com.sauderesidence.services.helpers.Criptografia;
 import br.com.sauderesidence.services.models.AgendaModel;
 import br.com.sauderesidence.services.models.PacienteModel;
+import br.com.sauderesidence.services.models.PrescricaoMedicaModel;
+import br.com.sauderesidence.services.models.SolicitacaoPrescricaoMedicaModel;
 import br.com.sauderesidence.services.models.UsuarioModel;
 
 @Path("/srhcws")
@@ -76,6 +82,43 @@ public class SaudeResidenceWs {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			return gson.toJson(e.getMessage());
+		}
+		
+	}
+	
+	@GET
+	@Path("listarprescricaomedica/{idadmission}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String ListarPrescricaoMedica(@PathParam("idadmission") int idadmission) {
+		
+		PrescricaoMedicaController ctr = new PrescricaoMedicaController();
+		List<PrescricaoMedicaModel> lista = new ArrayList<>();
+		Gson gson = new Gson();
+		try {
+			lista = ctr.listarPrescricaoPorAdmissao(idadmission);
+			return gson.toJson(lista);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return gson.toJson(e.getMessage());
+		}
+		
+	}
+	
+	@POST
+	@Path("addprescricaomedica")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String adicionarPrescricaoMedica(String content) {
+	
+		SolicitacaoPrescricaoMedicaController ctr = new SolicitacaoPrescricaoMedicaController();
+		Gson gson = new Gson();
+		try {
+			SolicitacaoPrescricaoMedicaModel sol = (SolicitacaoPrescricaoMedicaModel)gson.fromJson(content, SolicitacaoPrescricaoMedicaModel.class);
+			boolean resultado = ctr.inserirSolicitacao(sol);
+			return gson.toJson(resultado);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			return gson.toJson(false);
 		}
 		
 	}
