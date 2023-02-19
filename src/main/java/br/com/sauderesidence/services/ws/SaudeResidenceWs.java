@@ -15,13 +15,17 @@ import com.google.gson.Gson;
 
 import br.com.sauderesidence.services.controllers.AgendaController;
 import br.com.sauderesidence.services.controllers.PacienteController;
+import br.com.sauderesidence.services.controllers.PrescricaoEnfermagemController;
 import br.com.sauderesidence.services.controllers.PrescricaoMedicaController;
+import br.com.sauderesidence.services.controllers.SolicitacaoPrescricaoEnfermagemController;
 import br.com.sauderesidence.services.controllers.SolicitacaoPrescricaoMedicaController;
 import br.com.sauderesidence.services.controllers.UsuarioController;
 import br.com.sauderesidence.services.helpers.Criptografia;
 import br.com.sauderesidence.services.models.AgendaModel;
 import br.com.sauderesidence.services.models.PacienteModel;
+import br.com.sauderesidence.services.models.PrescricaoEnfermagemModel;
 import br.com.sauderesidence.services.models.PrescricaoMedicaModel;
+import br.com.sauderesidence.services.models.SolicitacaoPrescricaoEnfermagemModel;
 import br.com.sauderesidence.services.models.SolicitacaoPrescricaoMedicaModel;
 import br.com.sauderesidence.services.models.UsuarioModel;
 
@@ -114,6 +118,43 @@ public class SaudeResidenceWs {
 		Gson gson = new Gson();
 		try {
 			SolicitacaoPrescricaoMedicaModel sol = (SolicitacaoPrescricaoMedicaModel)gson.fromJson(content, SolicitacaoPrescricaoMedicaModel.class);
+			boolean resultado = ctr.inserirSolicitacao(sol);
+			return gson.toJson(resultado);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			return gson.toJson(false);
+		}
+		
+	}
+	
+	@GET
+	@Path("listarprescricaoenfermagem/{idadmission}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String ListarPrescricaoEnfermagem(@PathParam("idadmission") int idadmission) {
+		
+		PrescricaoEnfermagemController ctr = new PrescricaoEnfermagemController();
+		List<PrescricaoEnfermagemModel> lista = new ArrayList<>();
+		Gson gson = new Gson();
+		try {
+			lista = ctr.listarPrescricaoPorAdmissao(idadmission);
+			return gson.toJson(lista);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return gson.toJson(e.getMessage());
+		}
+		
+	}
+	
+	@POST
+	@Path("addsolicitarmaterial")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String adicionarPrescricaoEnfermagem(String content) {
+	
+		SolicitacaoPrescricaoEnfermagemController ctr = new SolicitacaoPrescricaoEnfermagemController();
+		Gson gson = new Gson();
+		try {
+			SolicitacaoPrescricaoEnfermagemModel sol = (SolicitacaoPrescricaoEnfermagemModel)gson.fromJson(content, SolicitacaoPrescricaoEnfermagemModel.class);
 			boolean resultado = ctr.inserirSolicitacao(sol);
 			return gson.toJson(resultado);
 		} catch (SQLException e) {
