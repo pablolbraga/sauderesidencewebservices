@@ -17,16 +17,20 @@ import br.com.sauderesidence.services.controllers.AgendaController;
 import br.com.sauderesidence.services.controllers.PacienteController;
 import br.com.sauderesidence.services.controllers.PrescricaoEnfermagemController;
 import br.com.sauderesidence.services.controllers.PrescricaoMedicaController;
+import br.com.sauderesidence.services.controllers.ProcedimentoEnfermagemController;
 import br.com.sauderesidence.services.controllers.SolicitacaoPrescricaoEnfermagemController;
 import br.com.sauderesidence.services.controllers.SolicitacaoPrescricaoMedicaController;
+import br.com.sauderesidence.services.controllers.SolicitacaoProcedimentoEnfermagemController;
 import br.com.sauderesidence.services.controllers.UsuarioController;
 import br.com.sauderesidence.services.helpers.Criptografia;
 import br.com.sauderesidence.services.models.AgendaModel;
 import br.com.sauderesidence.services.models.PacienteModel;
 import br.com.sauderesidence.services.models.PrescricaoEnfermagemModel;
 import br.com.sauderesidence.services.models.PrescricaoMedicaModel;
+import br.com.sauderesidence.services.models.ProcedimentoEnfermagemModel;
 import br.com.sauderesidence.services.models.SolicitacaoPrescricaoEnfermagemModel;
 import br.com.sauderesidence.services.models.SolicitacaoPrescricaoMedicaModel;
+import br.com.sauderesidence.services.models.SolicitacaoProcedimentoEnfermagemModel;
 import br.com.sauderesidence.services.models.UsuarioModel;
 
 @Path("/srhcws")
@@ -155,6 +159,43 @@ public class SaudeResidenceWs {
 		Gson gson = new Gson();
 		try {
 			SolicitacaoPrescricaoEnfermagemModel sol = (SolicitacaoPrescricaoEnfermagemModel)gson.fromJson(content, SolicitacaoPrescricaoEnfermagemModel.class);
+			boolean resultado = ctr.inserirSolicitacao(sol);
+			return gson.toJson(resultado);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			return gson.toJson(false);
+		}
+		
+	}
+	
+	@GET
+	@Path("listarprocedimentoenfermagem/{idadmission}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String ListarProcedimentoEnfermagem(@PathParam("idadmission") int idadmission) {
+		
+		ProcedimentoEnfermagemController ctr = new ProcedimentoEnfermagemController();
+		List<ProcedimentoEnfermagemModel> lista = new ArrayList<>();
+		Gson gson = new Gson();
+		try {
+			lista = ctr.listarProcedimentoPorAdmissao(idadmission);
+			return gson.toJson(lista);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return gson.toJson(e.getMessage());
+		}
+		
+	}
+	
+	@POST
+	@Path("addsolicitarprocedimento")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String adicionarProcedimentoEnfermagem(String content) {
+	
+		SolicitacaoProcedimentoEnfermagemController ctr = new SolicitacaoProcedimentoEnfermagemController();
+		Gson gson = new Gson();
+		try {
+			SolicitacaoProcedimentoEnfermagemModel sol = (SolicitacaoProcedimentoEnfermagemModel)gson.fromJson(content, SolicitacaoProcedimentoEnfermagemModel.class);
 			boolean resultado = ctr.inserirSolicitacao(sol);
 			return gson.toJson(resultado);
 		} catch (SQLException e) {
