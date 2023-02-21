@@ -14,20 +14,24 @@ import javax.ws.rs.core.MediaType;
 import com.google.gson.Gson;
 
 import br.com.sauderesidence.services.controllers.AgendaController;
+import br.com.sauderesidence.services.controllers.EquipamentoController;
 import br.com.sauderesidence.services.controllers.PacienteController;
 import br.com.sauderesidence.services.controllers.PrescricaoEnfermagemController;
 import br.com.sauderesidence.services.controllers.PrescricaoMedicaController;
 import br.com.sauderesidence.services.controllers.ProcedimentoEnfermagemController;
+import br.com.sauderesidence.services.controllers.SolicitacaoEquipamentoController;
 import br.com.sauderesidence.services.controllers.SolicitacaoPrescricaoEnfermagemController;
 import br.com.sauderesidence.services.controllers.SolicitacaoPrescricaoMedicaController;
 import br.com.sauderesidence.services.controllers.SolicitacaoProcedimentoEnfermagemController;
 import br.com.sauderesidence.services.controllers.UsuarioController;
 import br.com.sauderesidence.services.helpers.Criptografia;
 import br.com.sauderesidence.services.models.AgendaModel;
+import br.com.sauderesidence.services.models.EquipamentoModel;
 import br.com.sauderesidence.services.models.PacienteModel;
 import br.com.sauderesidence.services.models.PrescricaoEnfermagemModel;
 import br.com.sauderesidence.services.models.PrescricaoMedicaModel;
 import br.com.sauderesidence.services.models.ProcedimentoEnfermagemModel;
+import br.com.sauderesidence.services.models.SolicitacaoEquipamentoModel;
 import br.com.sauderesidence.services.models.SolicitacaoPrescricaoEnfermagemModel;
 import br.com.sauderesidence.services.models.SolicitacaoPrescricaoMedicaModel;
 import br.com.sauderesidence.services.models.SolicitacaoProcedimentoEnfermagemModel;
@@ -196,6 +200,43 @@ public class SaudeResidenceWs {
 		Gson gson = new Gson();
 		try {
 			SolicitacaoProcedimentoEnfermagemModel sol = (SolicitacaoProcedimentoEnfermagemModel)gson.fromJson(content, SolicitacaoProcedimentoEnfermagemModel.class);
+			boolean resultado = ctr.inserirSolicitacao(sol);
+			return gson.toJson(resultado);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			return gson.toJson(false);
+		}
+		
+	}
+	
+	@GET
+	@Path("listarequipamentos/{idadmission}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String ListarEquipamentos(@PathParam("idadmission") int idadmission) {
+		
+		EquipamentoController ctr = new EquipamentoController();
+		List<EquipamentoModel> lista = new ArrayList<>();
+		Gson gson = new Gson();
+		try {
+			lista = ctr.listarEquipamentoPorAdmissao(idadmission);
+			return gson.toJson(lista);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return gson.toJson(e.getMessage());
+		}
+		
+	}
+	
+	@POST
+	@Path("addsolicitarequipamento")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String adicionarSolicitacaoEquipamento(String content) {
+	
+		SolicitacaoEquipamentoController ctr = new SolicitacaoEquipamentoController();
+		Gson gson = new Gson();
+		try {
+			SolicitacaoEquipamentoModel sol = (SolicitacaoEquipamentoModel)gson.fromJson(content, SolicitacaoEquipamentoModel.class);
 			boolean resultado = ctr.inserirSolicitacao(sol);
 			return gson.toJson(resultado);
 		} catch (SQLException e) {
