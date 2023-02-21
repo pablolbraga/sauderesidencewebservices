@@ -15,11 +15,13 @@ import com.google.gson.Gson;
 
 import br.com.sauderesidence.services.controllers.AgendaController;
 import br.com.sauderesidence.services.controllers.EquipamentoController;
+import br.com.sauderesidence.services.controllers.ExameController;
 import br.com.sauderesidence.services.controllers.PacienteController;
 import br.com.sauderesidence.services.controllers.PrescricaoEnfermagemController;
 import br.com.sauderesidence.services.controllers.PrescricaoMedicaController;
 import br.com.sauderesidence.services.controllers.ProcedimentoEnfermagemController;
 import br.com.sauderesidence.services.controllers.SolicitacaoEquipamentoController;
+import br.com.sauderesidence.services.controllers.SolicitacaoExameController;
 import br.com.sauderesidence.services.controllers.SolicitacaoPrescricaoEnfermagemController;
 import br.com.sauderesidence.services.controllers.SolicitacaoPrescricaoMedicaController;
 import br.com.sauderesidence.services.controllers.SolicitacaoProcedimentoEnfermagemController;
@@ -27,11 +29,13 @@ import br.com.sauderesidence.services.controllers.UsuarioController;
 import br.com.sauderesidence.services.helpers.Criptografia;
 import br.com.sauderesidence.services.models.AgendaModel;
 import br.com.sauderesidence.services.models.EquipamentoModel;
+import br.com.sauderesidence.services.models.ExameModel;
 import br.com.sauderesidence.services.models.PacienteModel;
 import br.com.sauderesidence.services.models.PrescricaoEnfermagemModel;
 import br.com.sauderesidence.services.models.PrescricaoMedicaModel;
 import br.com.sauderesidence.services.models.ProcedimentoEnfermagemModel;
 import br.com.sauderesidence.services.models.SolicitacaoEquipamentoModel;
+import br.com.sauderesidence.services.models.SolicitacaoExameModel;
 import br.com.sauderesidence.services.models.SolicitacaoPrescricaoEnfermagemModel;
 import br.com.sauderesidence.services.models.SolicitacaoPrescricaoMedicaModel;
 import br.com.sauderesidence.services.models.SolicitacaoProcedimentoEnfermagemModel;
@@ -237,6 +241,43 @@ public class SaudeResidenceWs {
 		Gson gson = new Gson();
 		try {
 			SolicitacaoEquipamentoModel sol = (SolicitacaoEquipamentoModel)gson.fromJson(content, SolicitacaoEquipamentoModel.class);
+			boolean resultado = ctr.inserirSolicitacao(sol);
+			return gson.toJson(resultado);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			return gson.toJson(false);
+		}
+		
+	}
+	
+	@GET
+	@Path("listarexamesporadmissao/{idadmission}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String ListarExames(@PathParam("idadmission") int idadmission) {
+		
+		ExameController ctr = new ExameController();
+		List<ExameModel> lista = new ArrayList<>();
+		Gson gson = new Gson();
+		try {
+			lista = ctr.listarExamePorAdmissao(idadmission);
+			return gson.toJson(lista);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return gson.toJson(e.getMessage());
+		}
+		
+	}
+	
+	@POST
+	@Path("addsolicitarexame")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String adicionarSolicitacaoExame(String content) {
+	
+		SolicitacaoExameController ctr = new SolicitacaoExameController();
+		Gson gson = new Gson();
+		try {
+			SolicitacaoExameModel sol = (SolicitacaoExameModel)gson.fromJson(content, SolicitacaoExameModel.class);
 			boolean resultado = ctr.inserirSolicitacao(sol);
 			return gson.toJson(resultado);
 		} catch (SQLException e) {
