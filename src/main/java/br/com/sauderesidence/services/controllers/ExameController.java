@@ -11,7 +11,7 @@ import br.com.sauderesidence.services.models.ExameModel;
 
 public class ExameController {
 	
-public List<ExameModel> listarExamePorAdmissao(int idadmission) throws SQLException{
+	public List<ExameModel> listarExamePorAdmissao(int idadmission) throws SQLException{
 	
 		StringBuilder sql = new StringBuilder();
 		sql.append(""

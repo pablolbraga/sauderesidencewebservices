@@ -20,6 +20,7 @@ import br.com.sauderesidence.services.controllers.PacienteController;
 import br.com.sauderesidence.services.controllers.PrescricaoEnfermagemController;
 import br.com.sauderesidence.services.controllers.PrescricaoMedicaController;
 import br.com.sauderesidence.services.controllers.ProcedimentoEnfermagemController;
+import br.com.sauderesidence.services.controllers.RetornoExameController;
 import br.com.sauderesidence.services.controllers.SolicitacaoEquipamentoController;
 import br.com.sauderesidence.services.controllers.SolicitacaoExameController;
 import br.com.sauderesidence.services.controllers.SolicitacaoPrescricaoEnfermagemController;
@@ -34,6 +35,7 @@ import br.com.sauderesidence.services.models.PacienteModel;
 import br.com.sauderesidence.services.models.PrescricaoEnfermagemModel;
 import br.com.sauderesidence.services.models.PrescricaoMedicaModel;
 import br.com.sauderesidence.services.models.ProcedimentoEnfermagemModel;
+import br.com.sauderesidence.services.models.RetornoExameModel;
 import br.com.sauderesidence.services.models.SolicitacaoEquipamentoModel;
 import br.com.sauderesidence.services.models.SolicitacaoExameModel;
 import br.com.sauderesidence.services.models.SolicitacaoPrescricaoEnfermagemModel;
@@ -280,6 +282,24 @@ public class SaudeResidenceWs {
 			SolicitacaoExameModel sol = (SolicitacaoExameModel)gson.fromJson(content, SolicitacaoExameModel.class);
 			boolean resultado = ctr.inserirSolicitacao(sol);
 			return gson.toJson(resultado);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			return gson.toJson(false);
+		}
+		
+	}
+	
+	@POST
+	@Path("addretornoexame")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String adicionarRetornoExame(String content) {
+	
+		RetornoExameController ctr = new RetornoExameController();
+		Gson gson = new Gson();
+		try {
+			RetornoExameModel sol = (RetornoExameModel)gson.fromJson(content, RetornoExameModel.class);
+			ctr.inserirRetornoExame(sol);
+			return gson.toJson(true);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			return gson.toJson(false);
