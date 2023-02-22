@@ -28,6 +28,7 @@ import br.com.sauderesidence.services.controllers.SolicitacaoPrescricaoEnfermage
 import br.com.sauderesidence.services.controllers.SolicitacaoPrescricaoMedicaController;
 import br.com.sauderesidence.services.controllers.SolicitacaoProcedimentoEnfermagemController;
 import br.com.sauderesidence.services.controllers.UsuarioController;
+import br.com.sauderesidence.services.controllers.VisitasRealizadasController;
 import br.com.sauderesidence.services.helpers.Criptografia;
 import br.com.sauderesidence.services.models.AgendaModel;
 import br.com.sauderesidence.services.models.EquipamentoModel;
@@ -44,6 +45,7 @@ import br.com.sauderesidence.services.models.SolicitacaoPrescricaoEnfermagemMode
 import br.com.sauderesidence.services.models.SolicitacaoPrescricaoMedicaModel;
 import br.com.sauderesidence.services.models.SolicitacaoProcedimentoEnfermagemModel;
 import br.com.sauderesidence.services.models.UsuarioModel;
+import br.com.sauderesidence.services.models.VisitasRealizadasModel;
 
 @Path("/srhcws")
 public class SaudeResidenceWs {
@@ -323,6 +325,25 @@ public class SaudeResidenceWs {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			return gson.toJson(false);
+		}
+		
+	}
+	
+	@GET
+	@Path("buscarultimavisitarealizadaporadmissao/{idadmission}/{idespecialidade}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String buscarUltimaVisitaPorAdmissao(@PathParam("idadmission") int idadmission, @PathParam("idespecialidade") int idespecialidade) {
+		
+		VisitasRealizadasController ctr = new VisitasRealizadasController();
+		List<VisitasRealizadasModel> lista = new ArrayList<>();
+		Gson gson = new Gson();
+		try {
+			lista = ctr.buscarUltimaVisitaRealizadaPorAdmissao(idadmission, idespecialidade);
+			return gson.toJson(lista);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return gson.toJson(e.getMessage());
 		}
 		
 	}
