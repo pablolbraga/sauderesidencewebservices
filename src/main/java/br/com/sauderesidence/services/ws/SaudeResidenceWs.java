@@ -16,6 +16,7 @@ import com.google.gson.Gson;
 import br.com.sauderesidence.services.controllers.AgendaController;
 import br.com.sauderesidence.services.controllers.EquipamentoController;
 import br.com.sauderesidence.services.controllers.ExameController;
+import br.com.sauderesidence.services.controllers.IntercorrenciaController;
 import br.com.sauderesidence.services.controllers.PacienteController;
 import br.com.sauderesidence.services.controllers.PrescricaoEnfermagemController;
 import br.com.sauderesidence.services.controllers.PrescricaoMedicaController;
@@ -31,6 +32,7 @@ import br.com.sauderesidence.services.helpers.Criptografia;
 import br.com.sauderesidence.services.models.AgendaModel;
 import br.com.sauderesidence.services.models.EquipamentoModel;
 import br.com.sauderesidence.services.models.ExameModel;
+import br.com.sauderesidence.services.models.IntercorrenciaModel;
 import br.com.sauderesidence.services.models.PacienteModel;
 import br.com.sauderesidence.services.models.PrescricaoEnfermagemModel;
 import br.com.sauderesidence.services.models.PrescricaoMedicaModel;
@@ -299,6 +301,24 @@ public class SaudeResidenceWs {
 		try {
 			RetornoExameModel sol = (RetornoExameModel)gson.fromJson(content, RetornoExameModel.class);
 			ctr.inserirRetornoExame(sol);
+			return gson.toJson(true);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			return gson.toJson(false);
+		}
+		
+	}
+	
+	@POST
+	@Path("addintercorrencia")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String adicionarIntercorrencia(String content) {
+	
+		IntercorrenciaController ctr = new IntercorrenciaController();
+		Gson gson = new Gson();
+		try {
+			IntercorrenciaModel sol = (IntercorrenciaModel)gson.fromJson(content, IntercorrenciaModel.class);
+			ctr.inserirIntercorrencia(sol);
 			return gson.toJson(true);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

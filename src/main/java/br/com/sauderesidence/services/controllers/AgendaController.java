@@ -43,7 +43,7 @@ public class AgendaController {
 				+ ") J "
 				+ "WHERE "
 				+ "J.IDEVOLUTION IS NULL");
-		System.out.println(sql.toString());
+		//System.out.println(sql.toString());
 		PreparedStatement pst = Conexao.abrirConexaoOracle().prepareStatement(sql.toString());
 		pst.setInt(1, idperson);
 		ResultSet rs = pst.executeQuery();		
