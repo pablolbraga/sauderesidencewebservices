@@ -8,8 +8,8 @@ public class Conexao {
 	
 	private static Connection CONN_ORA;
 	private static final String DRIVER_ORA = "oracle.jdbc.OracleDriver";
-	//private static final String URL_ORA = "jdbc:oracle:thin:@192.168.0.3:1521:SRID";
-	private static final String URL_ORA = "jdbc:oracle:thin:@200.150.138.34:4308:SRID";
+	private static final String URL_ORA = "jdbc:oracle:thin:@192.168.0.3:1521:SRID";
+	//private static final String URL_ORA = "jdbc:oracle:thin:@200.150.138.34:4308:SRID";
 	private static final String USER_ORA = "dbIwSaudeResid";
 	private static final String PWD_ORA = "x";
 	

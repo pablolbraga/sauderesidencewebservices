@@ -15,7 +15,9 @@ import com.google.gson.Gson;
 
 import br.com.sauderesidence.services.controllers.AgendaController;
 import br.com.sauderesidence.services.controllers.EquipamentoController;
+import br.com.sauderesidence.services.controllers.EvolucaoController;
 import br.com.sauderesidence.services.controllers.ExameController;
+import br.com.sauderesidence.services.controllers.FichaTerapiaController;
 import br.com.sauderesidence.services.controllers.IntercorrenciaController;
 import br.com.sauderesidence.services.controllers.PacienteController;
 import br.com.sauderesidence.services.controllers.PrescricaoEnfermagemController;
@@ -32,7 +34,9 @@ import br.com.sauderesidence.services.controllers.VisitasRealizadasController;
 import br.com.sauderesidence.services.helpers.Criptografia;
 import br.com.sauderesidence.services.models.AgendaModel;
 import br.com.sauderesidence.services.models.EquipamentoModel;
+import br.com.sauderesidence.services.models.EvolucaoModel;
 import br.com.sauderesidence.services.models.ExameModel;
+import br.com.sauderesidence.services.models.FichaTerapiaModel;
 import br.com.sauderesidence.services.models.IntercorrenciaModel;
 import br.com.sauderesidence.services.models.PacienteModel;
 import br.com.sauderesidence.services.models.PrescricaoEnfermagemModel;
@@ -346,6 +350,33 @@ public class SaudeResidenceWs {
 			return gson.toJson(e.getMessage());
 		}
 		
+	}
+	
+	@POST
+	@Path("addfichaterapia")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String adicionarFichaTerapia(String content) {
+		Gson gson = new Gson();
+		EvolucaoController ctrEvolucao = new EvolucaoController();
+		FichaTerapiaController fichaTerapiaController = new FichaTerapiaController();
+		try {
+			FichaTerapiaModel ficha = (FichaTerapiaModel)gson.fromJson(content, FichaTerapiaModel.class);
+			// Gravar Evolução
+			EvolucaoModel evo = new EvolucaoModel();
+			evo.setDatafim(ficha.getDatafim());
+			evo.setDataini(ficha.getDatainicio());
+			evo.setIdadmission(ficha.getIdadmission());
+			evo.setIdprofessional(ficha.getIdprofessional());
+			evo.setIdtemplate(108);
+			ctrEvolucao.inserirEvolucao(evo);
+			
+			// Registra Ficha
+			boolean resultado = fichaTerapiaController.gravarFicha(ficha);
+			return gson.toJson(resultado);
+			
+		} catch (Exception e) {
+			return gson.toJson(e.getMessage());
+		}
 	}
 
 }
