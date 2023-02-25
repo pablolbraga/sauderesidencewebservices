@@ -17,6 +17,7 @@ import br.com.sauderesidence.services.controllers.AgendaController;
 import br.com.sauderesidence.services.controllers.EquipamentoController;
 import br.com.sauderesidence.services.controllers.EvolucaoController;
 import br.com.sauderesidence.services.controllers.ExameController;
+import br.com.sauderesidence.services.controllers.FichaMedicaController;
 import br.com.sauderesidence.services.controllers.FichaTerapiaController;
 import br.com.sauderesidence.services.controllers.IntercorrenciaController;
 import br.com.sauderesidence.services.controllers.PacienteController;
@@ -36,6 +37,7 @@ import br.com.sauderesidence.services.models.AgendaModel;
 import br.com.sauderesidence.services.models.EquipamentoModel;
 import br.com.sauderesidence.services.models.EvolucaoModel;
 import br.com.sauderesidence.services.models.ExameModel;
+import br.com.sauderesidence.services.models.FichaMedicaModel;
 import br.com.sauderesidence.services.models.FichaTerapiaModel;
 import br.com.sauderesidence.services.models.IntercorrenciaModel;
 import br.com.sauderesidence.services.models.PacienteModel;
@@ -372,6 +374,33 @@ public class SaudeResidenceWs {
 			
 			// Registra Ficha
 			boolean resultado = fichaTerapiaController.gravarFicha(ficha);
+			return gson.toJson(resultado);
+			
+		} catch (Exception e) {
+			return gson.toJson(e.getMessage());
+		}
+	}
+	
+	@POST
+	@Path("addfichamedica")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String adicionarFichaMedica(String content) {
+		Gson gson = new Gson();
+		EvolucaoController ctrEvolucao = new EvolucaoController();
+		FichaMedicaController fichaMedicaController = new FichaMedicaController();
+		try {
+			FichaMedicaModel ficha = (FichaMedicaModel)gson.fromJson(content, FichaMedicaModel.class);
+			// Gravar Evolução
+			EvolucaoModel evo = new EvolucaoModel();
+			evo.setDatafim(ficha.getDatafim());
+			evo.setDataini(ficha.getDatainicio());
+			evo.setIdadmission(ficha.getIdadmission());
+			evo.setIdprofessional(ficha.getIdprofessional());
+			evo.setIdtemplate(108);
+			ctrEvolucao.inserirEvolucao(evo);
+			
+			// Registra Ficha
+			boolean resultado = fichaMedicaController.gravarFicha(ficha);
 			return gson.toJson(resultado);
 			
 		} catch (Exception e) {
