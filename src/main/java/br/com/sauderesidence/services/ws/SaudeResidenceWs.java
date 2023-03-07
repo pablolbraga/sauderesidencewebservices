@@ -19,6 +19,7 @@ import br.com.sauderesidence.services.controllers.EvolucaoController;
 import br.com.sauderesidence.services.controllers.ExameController;
 import br.com.sauderesidence.services.controllers.FichaEnfermagemController;
 import br.com.sauderesidence.services.controllers.FichaMedicaController;
+import br.com.sauderesidence.services.controllers.FichaNutricaoController;
 import br.com.sauderesidence.services.controllers.FichaTerapiaController;
 import br.com.sauderesidence.services.controllers.IntercorrenciaController;
 import br.com.sauderesidence.services.controllers.PacienteController;
@@ -40,6 +41,7 @@ import br.com.sauderesidence.services.models.EvolucaoModel;
 import br.com.sauderesidence.services.models.ExameModel;
 import br.com.sauderesidence.services.models.FichaEnfermagemModel;
 import br.com.sauderesidence.services.models.FichaMedicaModel;
+import br.com.sauderesidence.services.models.FichaNutricaoModel;
 import br.com.sauderesidence.services.models.FichaTerapiaModel;
 import br.com.sauderesidence.services.models.IntercorrenciaModel;
 import br.com.sauderesidence.services.models.PacienteModel;
@@ -430,6 +432,33 @@ public class SaudeResidenceWs {
 			
 			// Registra Ficha
 			boolean resultado = fichaEnfermagemController.gravarFicha(ficha);
+			return gson.toJson(resultado);
+			
+		} catch (Exception e) {
+			return gson.toJson(e.getMessage());
+		}
+	}
+	
+	@POST
+	@Path("addfichanutricao")
+	@Produces(MediaType.APPLICATION_JSON)
+	public String adicionarFichaNutricao(String content) {
+		Gson gson = new Gson();
+		EvolucaoController ctrEvolucao = new EvolucaoController();
+		FichaNutricaoController fichaNutricaoController = new FichaNutricaoController();
+		try {
+			FichaNutricaoModel ficha = (FichaNutricaoModel)gson.fromJson(content, FichaNutricaoModel.class);
+			// Gravar Evolução
+			EvolucaoModel evo = new EvolucaoModel();
+			evo.setDatafim(ficha.getDatafim());
+			evo.setDataini(ficha.getDatainicio());
+			evo.setIdadmission(ficha.getIdadmission());
+			evo.setIdprofessional(ficha.getIdprofessional());
+			evo.setIdtemplate(109);
+			ctrEvolucao.inserirEvolucao(evo);
+			
+			// Registra Ficha
+			boolean resultado = fichaNutricaoController.gravarFicha(ficha);
 			return gson.toJson(resultado);
 			
 		} catch (Exception e) {
